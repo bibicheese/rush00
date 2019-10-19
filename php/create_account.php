@@ -15,12 +15,14 @@ function check_login($login)
     }
     return true;
 }
+header('Location: 127.0.0.1:8100/create_account.html');
 if (!$_POST['login'] || !$_POST['passwd'] || $_POST['submit'] != "Creer son compte" || !$_POST['lastname'] || !$_POST['firstname'] || !$_POST['mail'] || !check_login($_POST['login']))
 {
 	if (!check_login($_POST['login']))
 		echo"Nom de compte deja pris\n";
 	else
 		echo"Un champ est manquant\n";
+	header('location: create_account.html');
 	exit;
 }
 else
@@ -28,7 +30,8 @@ else
 	$salt = file_get_contents("private/salt");
 	$data = array();
 	$data['login'] = $_POST['login'];
-	$data['passwd'] = hash("whirlpool", $salt.$_POST['passwd']);
+	$login = $_POST['passwd'];
+	$data['passwd'] = hash("whirlpool", "$salt.$login");
 	$data['mail'] = $_POST['mail'];
 	$data['lastname'] = $_POST['lastname'];
 	$data['firstname'] = $_POST['firstname'];
